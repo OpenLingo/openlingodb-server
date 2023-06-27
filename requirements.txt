@@ -1,0 +1,10 @@
+--index-url https://pip-repo.devfu.com.au
+devfu
+Flask
+Flask-Cors
+Flask-JWT
+PyMySQL
+SQLAlchemy
+Werkzeug
+tornado
+tzlocal
