@@ -1,9 +1,13 @@
-from app import app, ROUTE_PREFIX
-from flask import jsonify, request
-from services import noun
+from config import ROUTE_PREFIX
+from flask import Blueprint, jsonify
+from services import noun as service
+
+bp = Blueprint('noun', __name__, url_prefix=ROUTE_PREFIX)
 
 
-@app.route(ROUTE_PREFIX + "noun")
+@bp.route("noun", methods=('GET', 'POST'))
 def get_all_nouns():
-    return jsonify(noun.get_all_nouns())
-
+    nouns = service.get_all_nouns()
+    if not nouns:
+        return "404 not found", 404
+    return jsonify(nouns)

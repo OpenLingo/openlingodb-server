@@ -1,22 +1,33 @@
+import mariadb
+import sys
+
 from typing import List
 from devfu.db import Database
+
+try:
+    conn = mariadb.connect(
+        user="root",
+        password="password",
+        host="127.0.0.1",
+        port=3306,
+        database="openlingo"
+    )
+except mariadb.Error as e:
+    print(f"Error connecting to mariaDB platform: {e}")
+    sys.exit(1)
+cur = conn.cursor()
 
 
 def get_all_nouns() -> List[dict]:
     sql = """
-           SELECT 
-               n.id, 
-               n.language_id, 
-               n.level_id, 
-               n.gender, 
-               n.word
-               
-           FROM noun AS n
+           SELECT * FROM noun
         """
-
-    with Database() as db:
-        return db.query_list(sql)
-
+    cur.execute("SELECT * FROM noun")
+    return [{"noun_id": noun_id,
+             "language_id": language_id,
+             "level_id": level_id,
+             "gender": gender,
+             "word": word} for (noun_id, language_id, level_id, gender, word) in cur]
 
 def get_noun(noun_id: int) -> dict:
     sql = """

@@ -32,6 +32,19 @@ def get_user() -> dict:
     with Database() as db:
         return db.query_one(sql, )
 
+def find_user(email: str) -> dict:
+    sql = """
+        SELECT 
+            u.id, 
+            u.email, 
+            u.`password`, 
+            u.role
+        FROM `user` AS u
+        WHERE LOWER(email) = LOWER(:email)
+    """
+
+    with Database as db:
+        return db.query_one(sql, email=email)
 
 def update_user(user: dict):
     pass

@@ -8,3 +8,4 @@ SQLAlchemy
 Werkzeug
 tornado
 tzlocal
+mariadb
