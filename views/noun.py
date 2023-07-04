@@ -5,7 +5,7 @@ from services import noun as service
 bp = Blueprint('noun', __name__, url_prefix=ROUTE_PREFIX)
 
 
-@bp.route("noun", methods=('GET', 'POST'))
+@bp.route("noun", methods=['GET'])
 def get_all_nouns():
     nouns = service.get_all_nouns()
     if not nouns:
