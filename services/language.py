@@ -1,20 +1,37 @@
+import mariadb
+import sys
+
 from typing import List
 from devfu.db import Database
+
+# would be best to implement this is a class to make use of a context manager
+try:
+    conn = mariadb.connect(
+        # these credentials should be put in config.py
+        database="openlingo",
+        user="root",
+        password="password",
+        host="127.0.0.1",
+        port=3306
+    )
+except mariadb.Error as e:
+    print(f"Error connecting to mariaDB platform: {e}")
+    sys.exit(1)
+cur = conn.cursor()
 
 
 def get_all_languages() -> List[dict]:
     sql = """
-           SELECT 
-               l.id, 
-               l.`code`, 
-               l.title, 
-               l.is_gendered
-               
-           FROM `language` AS l
-        """
-
-    with Database() as db:
-        return db.query_list(sql)
+               SELECT *
+               FROM language
+              """
+    # the cursor execution and list conversion of the cur object should be handled in
+    # the context manager mentioned above in order to reduce code repetition.
+    cur.execute(sql)
+    return [{"id": language_id,
+             "code": code,
+             "title": title,
+             "is_gendered": bool(is_gendered)} for (language_id, code, title, is_gendered) in cur]
 
 
 def get_language(language_id: int) -> dict:

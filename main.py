@@ -1,5 +1,6 @@
 from app import app
 from config import HOST
+from views import *  # noqa
 
 
 @app.route("/")
