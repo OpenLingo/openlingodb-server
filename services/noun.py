@@ -2,7 +2,8 @@ import mariadb
 import sys
 
 from typing import List
-from devfu.db import Database
+from database import Database as new
+# from devfu.db import Database
 
 # would be best to implement this is a class to make use of a context manager
 try:
@@ -33,6 +34,17 @@ def get_all_nouns() -> List[dict]:
              "word": word,
              "gender": gender,
              "language": language} for (noun_id, word, gender, language) in cur]
+
+
+def new_get_all_nouns():
+    sql = """
+           SELECT n.id, n.word, n.gender, l.title
+           FROM noun as n, language as l
+           WHERE n.language_id = l.id
+          """
+    with new() as db:
+        for item in db.query(sql):
+            print(item)
 
 
 def get_noun_by_id(noun_id) -> List[dict]:
@@ -142,3 +154,23 @@ def noun_exists(noun_id: int):
     with Database() as db:
         return db.scalar(sql, noun_id=noun_id) != 0
 
+
+def stress_test():
+    sql = '''
+            SELECT n.word, COUNT(nt.to_noun_id) as translations
+            FROM noun as n, noun_translation as nt
+            WHERE n.id = nt.from_noun_id
+            AND nt.to_noun_id IN (SELECT id 
+                                  FROM noun
+                                  WHERE language_id = 2
+                                 )
+            GROUP BY n.word
+            ORDER BY COUNT(nt.to_noun_id) DESC;
+          '''
+    with new() as db:
+        for item in db.query(sql):
+            print(item)
+
+
+if __name__ == '__main__':
+    stress_test()
