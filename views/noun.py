@@ -14,16 +14,18 @@ def get_nouns():
 
 @app.route(ROUTE_PREFIX + "noun/<int:noun_id>", methods=['GET'])
 def get_noun_by_id(noun_id):
+
     noun = service.get_noun_by_id(noun_id)
+
     if not noun:
-        return"404 not found", 404
+        return "404 not found", 404
     return jsonify(noun)
 
 
-@app.route(ROUTE_PREFIX + "noun/<int:noun_id>", methods=['PUT'])
+@app.route(ROUTE_PREFIX + "noun/update<int:noun_id>", methods=['PUT'])
 def update_noun(noun_id: int):
-    if not service.noun_exists(noun_id):
-        return "404 Not Found", 404
 
     data = request.get_json()
-    print(data)
+
+    service.update_noun(data)
+    return "s", 200

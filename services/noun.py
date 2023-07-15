@@ -57,6 +57,7 @@ def update_noun(noun: dict):
             WHERE id = ?
           """
     cur.execute(sql, (noun['language_id'], noun['level_id'], noun['gender'], noun['word'], noun['id']))
+    conn.commit()
 
 
 def get_noun(noun_id: int) -> dict:
