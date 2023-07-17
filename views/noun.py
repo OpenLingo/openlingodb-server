@@ -22,10 +22,15 @@ def get_noun_by_id(noun_id):
     return jsonify(noun)
 
 
+@app.route(ROUTE_PREFIX + "noun/insert", methods=['PUT'])
+def insert_noun():
+    data = request.get_json()
+    service.insert_noun(data)
+    return "s", 200
+
+
 @app.route(ROUTE_PREFIX + "noun/update<int:noun_id>", methods=['PUT'])
 def update_noun(noun_id: int):
-
     data = request.get_json()
-
     service.update_noun(data)
     return "s", 200
