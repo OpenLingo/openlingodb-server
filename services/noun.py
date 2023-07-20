@@ -7,8 +7,7 @@ else:
     from services.database import Database as new
 
 
-
-def get_all_nouns() -> List[dict]:
+def get_all_nouns():
     sql = """
            SELECT n.id, n.word, n.gender, l.title
            FROM noun as n, language as l
@@ -24,7 +23,33 @@ def get_noun_by_id(noun_id) -> List[dict]:
           """
     args = (noun_id,)
     with new() as db:
-        return db.query(sql, args)
+        return db.query(sql, args)[0]
+
+
+def verify_noun_by_word(noun):
+    sql = """
+            SELECT EXISTS(
+                SELECT 1 FROM noun WHERE word = ?
+            ) AS `exists`
+          """
+    args = (noun['word'],)
+    with new() as db:
+        return bool(db.query(sql, args)[0]['exists'])
+
+
+def insert_noun(noun: dict):
+    sql = """
+            INSERT INTO 
+                noun(language_id, level_id, gender, word)
+            VALUES
+                (?, NULL, ?, ?)
+          """
+    args = (noun['language_id'],
+            None if noun['gender'] == 'NULL' else noun['gender'],
+            noun['word'])
+    if not verify_noun_by_word(noun):
+        with new() as db:
+            db.insert(sql, args)
 
 
 def update_noun(noun: dict):
@@ -44,19 +69,6 @@ def update_noun(noun: dict):
     with new() as db:
         db.update(sql, args)
 
-
-def insert_noun(noun: dict):
-    sql = """
-            INSERT INTO 
-                noun(language_id, level_id, gender, word)
-            VALUES
-                (?, NULL, ?, ?)
-          """
-    args = (noun['language_id'],
-            noun['gender'],
-            noun['word'])
-    with new() as db:
-        db.insert(sql, args)
 
 # def insert_noun(noun: dict) -> int:
 #     for nullable in ['level_id', 'gender']:
@@ -107,12 +119,7 @@ def noun_exists(noun_id: int):
 
 def stress_test():
     sql = '''
-            UPDATE noun
-            SET language_id = ?,
-                level_id = ?,
-                gender = ?,
-                word = ?
-            WHERE id = ?
+            SELECT * FROM noun
           '''
     with new() as db:
         for item in db.query(sql):
@@ -120,4 +127,4 @@ def stress_test():
 
 
 if __name__ == '__main__':
-    stress_test()
+    verify_noun_by_word({'word': 'Dad'})
