@@ -1,23 +1,7 @@
 import mariadb
-from typing import List
-if __name__ == '__main__':
-    DATABASE_CREDENTIALS = {  # this is only here for testing purposes.
-            'database': "openlingo",
-            'user': "root",
-            'password': "password",
-            'host': "127.0.0.1",
-            'port': 3306
-    }
-else:
-    from config import DATABASE_CREDENTIALS
 
-# DATABASE_CREDENTIALS = {  # this is only here for testing purposes.
-#             'database': "openlingo",
-#             'user': "root",
-#             'password': "password",
-#             'host': "127.0.0.1",
-#             'port': 3306
-#     }
+from config import DATABASE_CREDENTIALS
+from typing import List
 
 
 class Database:
@@ -43,7 +27,7 @@ class Database:
         finally:
             self.conn.close()
 
-    def query(self, sql: str, sql_args: tuple = ()):
+    def query(self, sql: str, sql_args: tuple = ()) -> List[dict]:
         """
         Parameter(s):
                 sql (mandatory) -> An sql query as a string.
@@ -60,6 +44,7 @@ class Database:
         # Guard clause returns an empty list of dictionaries if sql statement contains
         # dangerous keywords.
         if 'INSERT' in sql or 'UPDATE' in sql or 'DELETE' in sql:
+            print("Query contained dangerous keywords.")
             return [{}]
         try:
             self.cur.execute(sql, sql_args)
@@ -77,6 +62,14 @@ class Database:
         # return [{columns[index]: row[index] for index in range(len(columns))} for row in self.cur]
 
     def insert(self, sql: str, sql_args: tuple):
+        """
+        Parameter(s):
+                sql (mandatory) -> An sql query as a string.
+            sql_args (optional) -> a tuple containing any arguments to be parsed with
+                                   the sql query, in the order that they appear in the
+                                   query.
+        Return(s): None
+        """
         try:
             self.cur.execute(sql, sql_args)
         except mariadb.Error as e:
@@ -84,6 +77,14 @@ class Database:
             self.conn.rollback()
 
     def update(self, sql: str, sql_args: tuple):
+        """
+        Parameter(s):
+                sql (mandatory) -> An sql query as a string.
+            sql_args (optional) -> a tuple containing any arguments to be parsed with
+                                   the sql query, in the order that they appear in the
+                                   query.
+        Return(s): None
+        """
         try:
             self.cur.execute(sql, sql_args)
         except mariadb.Error as e:
