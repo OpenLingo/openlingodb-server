@@ -30,12 +30,12 @@ class Database:
     def query(self, sql: str, sql_args: tuple = ()) -> List[dict]:
         """
         Parameter(s):
-                sql (mandatory) -> An sql query as a string.
-            sql_args (optional) -> a tuple containing any arguments to be parsed with
-                                   the sql query, in the order that they appear in the
-                                   query.
+            sql (mandatory) -> An sql query as a string.
+        sql_args (optional) -> a tuple containing any arguments to be parsed with
+                               the sql query, in the order that they appear in the
+                               query.
         Return(s):
-                         output -> A list of dictionaries, each of which represents one
+                     output -> A list of dictionaries, each of which represents one
                                    row of the executed query.
         """
         columns = []
@@ -64,8 +64,8 @@ class Database:
     def insert(self, sql: str, sql_args: tuple):
         """
         Parameter(s):
-                sql (mandatory) -> An sql query as a string.
-            sql_args (optional) -> a tuple containing any arguments to be parsed with
+                 sql (mandatory) -> An sql query as a string.
+            sql_args (mandatory) -> a tuple containing any arguments to be parsed with
                                    the sql query, in the order that they appear in the
                                    query.
         Return(s): None
@@ -79,8 +79,8 @@ class Database:
     def update(self, sql: str, sql_args: tuple):
         """
         Parameter(s):
-                sql (mandatory) -> An sql query as a string.
-            sql_args (optional) -> a tuple containing any arguments to be parsed with
+                 sql (mandatory) -> An sql query as a string.
+            sql_args (mandatory) -> a tuple containing any arguments to be parsed with
                                    the sql query, in the order that they appear in the
                                    query.
         Return(s): None
@@ -91,5 +91,17 @@ class Database:
             print(f"error: {e}. Cancelling transaction.")
             self.conn.rollback()
 
-    def delete(self, sql: str):
-        pass
+    def delete(self, sql: str, sql_args: tuple):
+        """
+                Parameter(s):
+                         sql (mandatory) -> An sql query as a string.
+                    sql_args (mandatory) -> a tuple containing any arguments to be parsed with
+                                           the sql query, in the order that they appear in the
+                                           query.
+                Return(s): None
+                """
+        try:
+            self.cur.execute(sql, sql_args)
+        except mariadb.Error as e:
+            print(f"error: {e}. Cancelling transaction.")
+            self.conn.rollback()

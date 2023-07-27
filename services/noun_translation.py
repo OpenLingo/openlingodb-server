@@ -1,91 +1,26 @@
 from typing import List
-from devfu.db import Database
+from services.database import Database
 
 
-def get_all_noun_translations() -> List[dict]:
+def get_translations(noun_id) -> List[dict]:
     sql = """
-           SELECT 
-               nt.id, 
-               nt.from_noun_id, 
-               nt.to_noun_id, 
-               nt.accuracy
-               
-           FROM noun_translation AS nt
-        """
+            SELECT n.id, n.word
+            FROM noun AS n, noun_translation AS nt
+            WHERE nt.from_noun_id = ?
+            AND n.id = nt.to_noun_id
+          """
+    args = (noun_id,)
 
     with Database() as db:
-        return db.query_list(sql)
+        return db.query(sql, args)
 
 
-def get_noun_translation(noun_translation_id: int) -> dict:
+def add_translation(data: dict):
     sql = """
-        SELECT 
-            nt.id, 
-            nt.from_noun_id, 
-            nt.to_noun_id, 
-            nt.accuracy
-            
-        FROM noun_translation AS nt
-        WHERE id=:noun_translation_id
-        """
+            INSERT INTO noun_translation(from_noun_id, to_noun_id, accuracy)
+            VALUES (?, ?, ?)
+          """
+    args = (data['from_noun_id'], data['to_noun_id', data['accuracy']])
 
     with Database() as db:
-        return db.query_one(sql, noun_translation_id=noun_translation_id)
-
-
-def update_noun_translation(noun_translation: dict):
-    sql = """
-        UPDATE noun_translation
-        SET  
-            from_noun_id=:from_noun_id, 
-            to_noun_id=:to_noun_id, 
-            accuracy=:accuracy
-        WHERE id=:id
-    """
-
-    with Database() as db:
-        db.execute(sql, **noun_translation)
-
-
-def insert_noun_translation(noun_translation: dict) -> int:
-    sql = """
-        INSERT INTO noun_translation(from_noun_id,to_noun_id,accuracy)
-        VALUES (:from_noun_id,:to_noun_id,:accuracy)
-    """
-
-    with Database() as db:
-        db.execute(sql, **noun_translation)
-        return db.last_id()
-
-
-def patch_noun_translation(noun_translation_id: int, data: dict):
-    patchable_fields = ['from_noun_id', 'to_noun_id', 'accuracy']
-
-    for k in data.keys():
-        if k not in patchable_fields:
-            raise ValueError("Invalid field '{}'".format(k))
-
-    used = ["`{0}`=:{0}".format(f) for f in data.keys()]
-
-    sql = "UPDATE `noun_translation` SET {} WHERE id=:noun_translation_id".format(",".join(used))
-
-    with Database() as db:
-        db.execute(sql, noun_translation_id=noun_translation_id, **data)
-
-
-def delete_noun_translation(noun_translation_id: int):
-    sql = """
-        DELETE FROM noun_translation 
-        WHERE id=:noun_translation_id
-    """
-
-    with Database() as db:
-        db.execute(sql, noun_translation_id=noun_translation_id)
-
-
-def noun_translation_exists(noun_translation_id: int):
-    sql = "SELECT EXISTS(SELECT 1 FROM `noun_translation` WHERE id=:noun_translation_id);"
-
-    with Database() as db:
-        return db.scalar(sql, noun_translation_id=noun_translation_id) != 0
-
+        db.insert(sql, args)

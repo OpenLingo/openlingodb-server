@@ -1,9 +1,10 @@
 from typing import List
-
 from services.database import Database
 
+# Start using DEVFU.db to import Database for context managers.
 
-def get_all_nouns():
+
+def get_all_nouns() -> List[dict]:
     sql = """
            SELECT n.id, n.word, n.gender, l.title
            FROM noun as n, language as l
@@ -50,6 +51,8 @@ def insert_noun(noun: dict):
     if not verify_noun_by_word(noun):
         with Database() as db:
             db.insert(sql, args)
+    else:
+        print("that noun is already in the database")
 
 
 def update_noun(noun: dict):
