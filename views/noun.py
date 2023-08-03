@@ -1,5 +1,4 @@
-from app import app
-from config import ROUTE_PREFIX
+from app import app, ROUTE_PREFIX
 from flask import jsonify, request
 from services import noun as service
 
@@ -38,6 +37,12 @@ def get_noun_by_id(noun_id):
     if not noun:
         return "404 not found", 404
     return jsonify(noun)
+
+
+@app.route(ROUTE_PREFIX + 'noun/search/<string:search_term>', methods=['GET'])
+def get_noun_by_string(search_term):
+
+    return service.get_nouns_by_string(search_term)
 
 
 @app.route(ROUTE_PREFIX + "noun/insert", methods=['PUT'])

@@ -15,6 +15,19 @@ def get_all_nouns() -> List[dict]:
         return db.query(sql)
 
 
+def get_nouns_by_string(search_term) -> List[dict]:
+    sql = """
+            SELECT *
+            FROM noun
+            WHERE word LIKE(?)
+          """
+    search_term = search_term + '%'
+    args = (search_term,)
+
+    with Database() as db:
+        return db.query(sql, args)
+
+
 def get_noun_by_id(noun_id) -> dict:
     sql = """
             SELECT * 

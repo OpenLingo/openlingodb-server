@@ -1,10 +1,9 @@
-from app import app
-from config import ROUTE_PREFIX
+from app import app, ROUTE_PREFIX
 from flask import jsonify, request
 from services import noun_translation as service
 
 
-@app.route(ROUTE_PREFIX + "translation/<int:noun_id>", methods=['GET'])
+@app.route(ROUTE_PREFIX + "noun_translation/<int:noun_id>", methods=['GET'])
 def get_translations(noun_id):
     """
     Return(s):
@@ -20,7 +19,7 @@ def get_translations(noun_id):
     return jsonify(translations)
 
 
-@app.route(ROUTE_PREFIX + "translation/insert", methods=['PUT'])
+@app.route(ROUTE_PREFIX + "noun_translation/insert", methods=['PUT'])
 def add_translation():
     """
     Parameter(s): Requires that any data to be inserted be sent via http using the
@@ -29,9 +28,17 @@ def add_translation():
     Return(s): A http response for the client to make use of.
 
     Route:
-    http://127.0.0.1:5000/api/translation/add
+    http://127.0.0.1:5000/api/translation/insert
     """
     data = request.get_json()
+    service.insert_translation(data)
+    return "success", 200
 
-    service.insert_noun(data)
+
+@app.route(ROUTE_PREFIX + 'noun_translation/delete', methods=['PUT'])
+def delete_translation():
+
+    data = request.get_json()
+
+    service.delete_translation(data)
     return "success", 200

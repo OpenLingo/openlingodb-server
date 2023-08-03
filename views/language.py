@@ -1,5 +1,4 @@
-from app import app
-from config import ROUTE_PREFIX
+from app import app, ROUTE_PREFIX
 from flask import jsonify
 from services import language as service
 

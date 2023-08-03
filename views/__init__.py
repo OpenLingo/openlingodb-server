@@ -1,1 +1,1 @@
-__all__ = ["language", "noun", "user"]
+__all__ = ["language", "noun", "user", "noun_translation"]
