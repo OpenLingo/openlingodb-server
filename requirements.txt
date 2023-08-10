@@ -4,7 +4,7 @@ Flask
 Flask-Cors
 Flask-JWT
 PyMySQL
-SQLAlchemy
+SQLAlchemy==1.4.49
 Werkzeug
 tornado
 tzlocal

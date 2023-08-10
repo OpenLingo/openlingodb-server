@@ -12,7 +12,7 @@ def get_translations(noun_id):
     Route:
     http://127.0.0.1:5000/api/translation/noun_id
     """
-    translations = service.get_translations(noun_id)
+    translations = service.get_noun_translations(noun_id)
 
     if not translations:
         return "404 not found", 404
@@ -31,7 +31,7 @@ def add_translation():
     http://127.0.0.1:5000/api/translation/insert
     """
     data = request.get_json()
-    service.insert_translation(data)
+    service.insert_noun_translation(data)
     return "success", 200
 
 
@@ -39,6 +39,5 @@ def add_translation():
 def delete_translation():
 
     data = request.get_json()
-
-    service.delete_translation(data)
+    service.delete_noun_translation(data[0], data[1])
     return "success", 200

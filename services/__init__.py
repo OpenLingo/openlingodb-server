@@ -1,5 +1,4 @@
 __all__ = ['app_log',
-           'database',
            'definition',
            'dialect',
            'feedback',

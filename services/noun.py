@@ -1,7 +1,5 @@
 from typing import List
-from services.database import Database
-
-# Start using DEVFU.db to import Database for context managers.
+from devfu.db import Database
 
 
 def get_all_nouns() -> List[dict]:
@@ -12,73 +10,84 @@ def get_all_nouns() -> List[dict]:
            ORDER BY n.id
           """
     with Database() as db:
-        return db.query(sql)
+        return db.query_list(sql)
 
 
 def get_nouns_by_string(search_term) -> List[dict]:
     sql = """
             SELECT *
             FROM noun
-            WHERE word LIKE(?)
+            WHERE word LIKE(:search_term)
           """
-    search_term = search_term + '%'
-    args = (search_term,)
 
     with Database() as db:
-        return db.query(sql, args)
+        return db.query_list(sql, search_term=search_term + '%')
 
 
-def get_noun_by_id(noun_id) -> dict:
+def get_noun_by_id(noun_id: int) -> dict:
     sql = """
-            SELECT * 
-            FROM noun 
-            WHERE id = ?
-          """
-    args = (noun_id,)
+            SELECT
+                n.id,
+                n.language_id,
+                n.level_id,
+                n.gender,
+                n.word
+
+            FROM noun AS n
+            WHERE id=:noun_id
+            """
 
     with Database() as db:
-        return db.query(sql, args)[0]
+        return db.query_one(sql, noun_id=noun_id)
 
 
 def verify_noun_by_word(noun) -> bool:
     sql = """
             SELECT EXISTS(
-                SELECT 1 FROM noun WHERE word = ?
+                SELECT 1 FROM noun WHERE word = :noun
             ) AS `exists`
           """
-    args = (noun['word'],)
 
     with Database() as db:
-        return bool(db.query(sql, args)[0]['exists'])
+        return bool(db.scalar(sql, noun=noun))
 
 
 def insert_noun(noun: dict):
-    sql = """
-            INSERT INTO noun(language_id, level_id, gender, word)
-            VALUES (?, NULL, ?, ?)
-          """
-    args = (noun['language_id'],
-            None if noun['gender'] == 'NULL' else noun['gender'],
-            noun['word'])
+    # Ask andrew about this.
+    for nullable in ['level_id', 'gender']:
+        if noun[nullable] == 0 or 'NULL':
+            noun[nullable] = None
+        # noun[nullable] = noun[nullable] if nullable in noun and \
+        #                                    (noun[nullable] or not nullable.endswith('_id')) else None
 
-    if not verify_noun_by_word(noun):
-        with Database() as db:
-            db.insert(sql, args)
-    else:
-        print("that noun is already in the database")
+    sql = """
+        INSERT INTO noun(language_id,level_id,gender,word)
+        VALUES (:language_id,:level_id,:gender,:word)
+    """
+
+    if verify_noun_by_word(noun['word']):
+        return
+    with Database() as db:
+        db.execute(sql, **noun)
 
 
 def update_noun(noun: dict):
+    for nullable in ['level_id', 'gender']:
+        noun[nullable] = noun[nullable] if nullable in noun and \
+                                           (noun[nullable] or not nullable.endswith('_id')) else None
+
     sql = """
-            UPDATE noun
-            SET language_id = ?, level_id = ?, gender = ?, word = ?
-            WHERE id = ?
-          """
-    args = (noun['language_id'], noun['level_id'], noun['gender'], noun['word'], noun['id'])
+        UPDATE noun
+        SET
+            language_id=:language_id,
+            level_id=:level_id,
+            gender=:gender,
+            word=:word
+        WHERE id=:id
+    """
 
     with Database() as db:
-        db.update(sql, args)
-
+        db.execute(sql, **noun)
 
 # def patch_noun(noun_id: int, data: dict):
 #     patchable_fields = ['language_id', 'level_id', 'gender', 'word']
