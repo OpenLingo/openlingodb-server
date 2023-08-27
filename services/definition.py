@@ -2,22 +2,23 @@ from typing import List
 from devfu.db import Database
 
 
-def get_all_definitions() -> List[dict]:
+def get_all_definitions(noun_id: int) -> List[dict]:
     sql = """
            SELECT 
-               d.id, 
-               d.dialect_id, 
-               d.noun_id, 
-               d.`text`
+               dn.id, 
+               dt.title, 
+               dn.noun_id, 
+               dn.`text`
                
-           FROM definition AS d
+           FROM definition AS dn, dialect AS dt
+           WHERE dn.noun_id = :noun_id
         """
 
     with Database() as db:
-        return db.query_list(sql)
+        return db.query_list(sql, noun_id=noun_id)
 
 
-def get_definition(definition_id: int) -> dict:
+def get_definitions(noun_id: int) -> List[dict]:
     sql = """
         SELECT 
             d.id, 
@@ -26,11 +27,12 @@ def get_definition(definition_id: int) -> dict:
             d.`text`
             
         FROM definition AS d
-        WHERE id=:definition_id
+        WHERE d.noun_id = :noun_id
+        ORDER BY d.dialect_id
         """
 
     with Database() as db:
-        return db.query_one(sql, definition_id=definition_id)
+        return db.query_list(sql, noun_id=noun_id)
 
 
 def update_definition(definition: dict):
@@ -49,8 +51,8 @@ def update_definition(definition: dict):
 
 def insert_definition(definition: dict) -> int:
     sql = """
-        INSERT INTO definition(dialect_id,noun_id,`text`)
-        VALUES (:dialect_id,:noun_id,:text)
+        INSERT INTO definition(dialect_id, noun_id, `text`)
+        VALUES (:dialect_id, :noun_id, :text)
     """
 
     with Database() as db:

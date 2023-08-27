@@ -33,6 +33,21 @@ def get_dialect(dialect_id: int) -> dict:
         return db.query_one(sql, dialect_id=dialect_id)
 
 
+def get_dialects_by_language(language_id: int) -> List[dict]:
+    sql = """
+            SELECT 
+                d.id, 
+                d.language_id, 
+                d.`code`, 
+                d.title
+            FROM dialect as d 
+            WHERE d.language_id = :language_id
+          """
+
+    with Database() as db:
+        return db.query_list(sql, language_id=language_id)
+
+
 def update_dialect(dialect: dict):
     sql = """
         UPDATE dialect
