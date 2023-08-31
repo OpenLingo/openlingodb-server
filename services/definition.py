@@ -25,9 +25,9 @@ def get_definitions(noun_id: int) -> List[dict]:
             d.dialect_id, 
             d.noun_id, 
             d.`text`
-            
         FROM definition AS d
         WHERE d.noun_id = :noun_id
+        AND d.dialect_id = 1 -- Limits the definitions to those with an australian english dialect. Remove later!
         ORDER BY d.dialect_id
         """
 

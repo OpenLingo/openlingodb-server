@@ -4,7 +4,7 @@ from devfu.db import Database
 
 def get_all_nouns() -> List[dict]:
     sql = """
-           SELECT n.id, n.word, n.gender, l.title
+           SELECT n.id, n.word, n.gender, n.language_id
            FROM noun as n, language as l
            WHERE n.language_id = l.id
            ORDER BY n.id
