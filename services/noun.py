@@ -55,10 +55,10 @@ def verify_noun_by_word(noun) -> bool:
 def insert_noun(noun: dict):
     # Ask andrew about this.
     for nullable in ['level_id', 'gender']:
-        if noun[nullable] == 0 or 'NULL':
-            noun[nullable] = None
-        # noun[nullable] = noun[nullable] if nullable in noun and \
-        #                                    (noun[nullable] or not nullable.endswith('_id')) else None
+        #     if noun[nullable] == 0 or 'NULL':
+        #         noun[nullable] = None
+        noun[nullable] = noun[nullable] if nullable in noun and \
+                                       (noun[nullable] or not nullable.endswith('_id')) else None
 
     sql = """
         INSERT INTO noun(language_id,level_id,gender,word)
