@@ -25,3 +25,11 @@ def insert_definition():
     data = request.get_json()
     service.insert_definition(data)
     return "success", 200
+
+
+@app.route(ROUTE_PREFIX + "definition/delete", methods=['PUT'])
+def delete_definition():
+
+    data = request.get_json()
+    service.delete_definition(data)
+    return "success", 200

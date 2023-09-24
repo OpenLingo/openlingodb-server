@@ -57,7 +57,7 @@ def insert_noun():
     http://127.0.0.1:5000/api/insert
     """
     data = request.get_json()
-
+    print(data)
     service.insert_noun(data)
     return "success", 200
 
