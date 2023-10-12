@@ -1,5 +1,5 @@
 from app import app, ROUTE_PREFIX
-from flask import jsonify
+from flask import jsonify, request
 from services import user as service
 
 
@@ -15,3 +15,13 @@ def get_user_by_email(email: str):
     if not u:
         return "404 Not Found", 404
     return jsonify(u)
+
+
+@app.route(ROUTE_PREFIX + "user/insert", methods=['PUT'])
+def insert_user():
+
+    data = request.get_json()
+    print(data)
+
+    service.insert_user(data)
+    return "success", 200

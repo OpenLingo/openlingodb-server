@@ -50,8 +50,14 @@ def update_user(user: dict):
     pass
 
 
-def insert_user(user: dict) -> int:
-    pass
+def insert_user(user: dict):
+    sql = """
+            INSERT INTO user(email, password, `role`, timezone)
+            VALUES (:email, :password, :role, :timezone)
+        """
+
+    with Database() as db:
+        db.execute(sql, **user)
 
 
 def patch_user(user_id: int, data: dict):

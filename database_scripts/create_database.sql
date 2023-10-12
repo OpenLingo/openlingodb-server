@@ -1,5 +1,5 @@
--- CREATE DATABASE IF NOT EXISTS OpenLingo;
--- USE OpenLingo;
+CREATE DATABASE IF NOT EXISTS OpenLingo;
+USE OpenLingo;
 
 -- Strong entities
 CREATE TABLE IF NOT EXISTS `language` (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS user (
     id INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(100) NOT NULL,
     `password` VARCHAR(50) NOT NULL,
-    `role` VARCHAR(20) NOT NULL CHECK (`role` IN ('user', 'contributor', 'admin')),
+    `role` ENUM('Contributor', 'Moderator', 'Admin') NOT NULL,
     timezone VARCHAR(10) NOT NULL,
     PRIMARY KEY(id)
 );
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `definition` (
     -- > could remove the dialect attribute entirely and inject the dependency 
     --   elsewhere.
     id INT NOT NULL AUTO_INCREMENT,
-    dialect_id INT NOT NULL,
+    dialect_id INT,
     noun_id INT NOT NULL,
     `text` VARCHAR(400) NOT NULL,
     PRIMARY KEY(id),
