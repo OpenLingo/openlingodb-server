@@ -1,0 +1,626 @@
+-- MariaDB dump 10.19  Distrib 10.11.2-MariaDB, for Win64 (AMD64)
+--
+-- Host: localhost    Database: openlingo
+-- ------------------------------------------------------
+-- Server version       10.11.2-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `app_log`
+--
+
+DROP TABLE IF EXISTS `app_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `log_level` int(11) NOT NULL,
+  `message` varchar(1000) NOT NULL,
+  `date_time` datetime NOT NULL,
+  `creator` varchar(32) NOT NULL,
+  `source` varchar(160) NOT NULL,
+  `request` varchar(160) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `app_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app_log`
+--
+
+LOCK TABLES `app_log` WRITE;
+/*!40000 ALTER TABLE `app_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `app_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `definition`
+--
+
+DROP TABLE IF EXISTS `definition`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `definition` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dialect_id` int(11) NOT NULL,
+  `noun_id` int(11) NOT NULL,
+  `text` varchar(400) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dialect_id` (`dialect_id`),
+  KEY `noun_id` (`noun_id`),
+  CONSTRAINT `definition_ibfk_1` FOREIGN KEY (`dialect_id`) REFERENCES `dialect` (`id`),
+  CONSTRAINT `definition_ibfk_2` FOREIGN KEY (`noun_id`) REFERENCES `noun` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `definition`
+--
+
+LOCK TABLES `definition` WRITE;
+/*!40000 ALTER TABLE `definition` DISABLE KEYS */;
+INSERT INTO `definition` VALUES
+(1,1,1,'a woman in relation to her child or children.'),
+(2,3,1,'a woman in relation to her child or children.'),
+(3,4,1,'a woman in relation to her child or children.'),
+(4,2,1,'a woman in relation to her child or children.'),
+(9,1,3,'a woman or girl in relation to other daughters and sons of her parents.'),
+(10,2,3,'a woman or girl in relation to other daughters and sons of her parents.'),
+(11,3,3,'a woman or girl in relation to other daughters and sons of her parents.'),
+(12,4,3,'a woman or girl in relation to other daughters and sons of her parents.'),
+(13,1,46,'a piece of furniture with a flat or sloping surface and typically with drawers, at which one can read, write, or do other work.'),
+(14,4,46,'a piece of furniture with a flat or sloping surface and typically with drawers, at which one can read, write, or do other work.'),
+(15,2,46,'a piece of furniture with a flat or sloping surface and typically with drawers, at which one can read, write, or do other work.'),
+(16,3,46,'a piece of furniture with a flat or sloping surface and typically with drawers, at which one can read, write, or do other work.'),
+(18,2,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.'),
+(19,3,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.'),
+(20,4,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.'),
+(21,1,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.'),
+(22,2,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.'),
+(23,4,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.'),
+(24,3,46,'a counter in a hotel, bank, or airport at which a customer may check in or obtain information.');
+/*!40000 ALTER TABLE `definition` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dialect`
+--
+
+DROP TABLE IF EXISTS `dialect`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dialect` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL,
+  `code` varchar(20) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `language_id` (`language_id`),
+  CONSTRAINT `dialect_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dialect`
+--
+
+LOCK TABLES `dialect` WRITE;
+/*!40000 ALTER TABLE `dialect` DISABLE KEYS */;
+INSERT INTO `dialect` VALUES
+(1,1,'en-AU','Australian English'),
+(2,1,'en-GB','British English'),
+(3,1,'en-US','American English'),
+(4,1,'en-CA','Canadian English'),
+(5,2,'de-DE','High German'),
+(6,2,'de-AT','Austrian German'),
+(7,2,'de-CH','Swiss German');
+/*!40000 ALTER TABLE `dialect` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `comment` varchar(1000) NOT NULL,
+  `json_data` varchar(200) DEFAULT NULL,
+  `entity` varchar(50) DEFAULT NULL,
+  `entity_id` int(11) DEFAULT NULL,
+  `is_approved` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback`
+--
+
+LOCK TABLES `feedback` WRITE;
+/*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
+/*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `language`
+--
+
+DROP TABLE IF EXISTS `language`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `language` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `is_gendered` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `language`
+--
+
+LOCK TABLES `language` WRITE;
+/*!40000 ALTER TABLE `language` DISABLE KEYS */;
+INSERT INTO `language` VALUES
+(1,'ENG','English',0),
+(2,'GER','German',1);
+/*!40000 ALTER TABLE `language` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `level`
+--
+
+DROP TABLE IF EXISTS `level`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `level` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL,
+  `code` varchar(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `language_id` (`language_id`),
+  CONSTRAINT `level_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `level`
+--
+
+LOCK TABLES `level` WRITE;
+/*!40000 ALTER TABLE `level` DISABLE KEYS */;
+INSERT INTO `level` VALUES
+(1,1,'FUNC','Functional'),
+(2,1,'VOC','Vocational'),
+(3,1,'COMP','Competent'),
+(4,1,'PROF','Proficient'),
+(5,1,'SUP','Superior'),
+(6,2,'A1','Beginner'),
+(7,2,'A2','Elementary'),
+(8,2,'B1','Intermediate'),
+(9,2,'B2','Upper Intermediate'),
+(10,2,'C1','Advanced'),
+(11,2,'C2','Highly Competent');
+/*!40000 ALTER TABLE `level` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `note`
+--
+
+DROP TABLE IF EXISTS `note`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `note` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `comment` varchar(1000) NOT NULL,
+  `json_data` varchar(200) DEFAULT NULL,
+  `entity` varchar(50) DEFAULT NULL,
+  `entity_id` int(11) DEFAULT NULL,
+  `is_public` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `note_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `note`
+--
+
+LOCK TABLES `note` WRITE;
+/*!40000 ALTER TABLE `note` DISABLE KEYS */;
+/*!40000 ALTER TABLE `note` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `noun`
+--
+
+DROP TABLE IF EXISTS `noun`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `noun` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `language_id` int(11) NOT NULL,
+  `level_id` int(11) DEFAULT NULL,
+  `gender` varchar(1) DEFAULT NULL,
+  `word` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `language_id` (`language_id`),
+  KEY `level_id` (`level_id`),
+  CONSTRAINT `noun_ibfk_1` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`),
+  CONSTRAINT `noun_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `level` (`id`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`gender` in ('f','m','n',NULL))
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `noun`
+--
+
+LOCK TABLES `noun` WRITE;
+/*!40000 ALTER TABLE `noun` DISABLE KEYS */;
+INSERT INTO `noun` VALUES
+(1,1,NULL,NULL,'Mother'),
+(2,1,NULL,NULL,'Father'),
+(3,1,NULL,NULL,'Sister'),
+(4,1,NULL,NULL,'Brother'),
+(5,1,NULL,NULL,'Child'),
+(6,1,NULL,NULL,'Aunt'),
+(7,1,NULL,NULL,'Uncle'),
+(8,1,NULL,NULL,'Grandmother'),
+(9,1,NULL,NULL,'GrandFather'),
+(10,2,NULL,'f','Mutter'),
+(11,2,NULL,'m','Vater'),
+(12,2,NULL,'f','Schwester'),
+(13,2,NULL,'m','Bruder'),
+(14,2,NULL,'n','Kind'),
+(15,2,NULL,'f','Tante'),
+(16,2,NULL,'m','Onkel'),
+(17,2,NULL,'f','Großmutter'),
+(18,2,NULL,'m','Großvater'),
+(19,2,NULL,'f','Mutti'),
+(20,2,NULL,'m','Hund'),
+(21,2,NULL,'f','Katze'),
+(22,1,NULL,NULL,'Dog'),
+(23,1,NULL,NULL,'Cat'),
+(25,1,NULL,NULL,'Mouse'),
+(26,2,NULL,'f','Maus'),
+(27,1,NULL,NULL,'Bird'),
+(28,2,NULL,'m','Vogel'),
+(29,2,NULL,'n','Bier'),
+(30,1,NULL,NULL,'Beer'),
+(31,1,NULL,NULL,'Animal'),
+(32,2,NULL,'n','Tier'),
+(33,2,NULL,'m','Hunden'),
+(34,1,NULL,NULL,'Food'),
+(35,2,NULL,'n','Essen'),
+(36,2,NULL,'m','Stein'),
+(37,1,NULL,NULL,'Rock'),
+(41,2,NULL,'m','Schädel'),
+(42,1,NULL,NULL,'Skull'),
+(43,2,NULL,'m','Schuh'),
+(44,1,NULL,NULL,'Shoe'),
+(45,1,NULL,NULL,'Bottle'),
+(46,1,NULL,NULL,'Desk'),
+(47,1,NULL,NULL,'fire');
+/*!40000 ALTER TABLE `noun` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `noun_dialect`
+--
+
+DROP TABLE IF EXISTS `noun_dialect`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `noun_dialect` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dialect_id` int(11) NOT NULL,
+  `noun_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dialect_id` (`dialect_id`),
+  KEY `noun_id` (`noun_id`),
+  CONSTRAINT `noun_dialect_ibfk_1` FOREIGN KEY (`dialect_id`) REFERENCES `dialect` (`id`),
+  CONSTRAINT `noun_dialect_ibfk_2` FOREIGN KEY (`noun_id`) REFERENCES `noun` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `noun_dialect`
+--
+
+LOCK TABLES `noun_dialect` WRITE;
+/*!40000 ALTER TABLE `noun_dialect` DISABLE KEYS */;
+/*!40000 ALTER TABLE `noun_dialect` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `noun_topic`
+--
+
+DROP TABLE IF EXISTS `noun_topic`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `noun_topic` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `noun_id` int(11) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `noun_id` (`noun_id`),
+  KEY `topic_id` (`topic_id`),
+  CONSTRAINT `noun_topic_ibfk_1` FOREIGN KEY (`noun_id`) REFERENCES `noun` (`id`),
+  CONSTRAINT `noun_topic_ibfk_2` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `noun_topic`
+--
+
+LOCK TABLES `noun_topic` WRITE;
+/*!40000 ALTER TABLE `noun_topic` DISABLE KEYS */;
+/*!40000 ALTER TABLE `noun_topic` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `noun_translation`
+--
+
+DROP TABLE IF EXISTS `noun_translation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `noun_translation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_noun_id` int(11) NOT NULL,
+  `to_noun_id` int(11) NOT NULL,
+  `accuracy` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `from_noun_id` (`from_noun_id`),
+  KEY `to_noun_id` (`to_noun_id`),
+  CONSTRAINT `noun_translation_ibfk_1` FOREIGN KEY (`from_noun_id`) REFERENCES `noun` (`id`),
+  CONSTRAINT `noun_translation_ibfk_2` FOREIGN KEY (`to_noun_id`) REFERENCES `noun` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `noun_translation`
+--
+
+LOCK TABLES `noun_translation` WRITE;
+/*!40000 ALTER TABLE `noun_translation` DISABLE KEYS */;
+INSERT INTO `noun_translation` VALUES
+(5,2,11,100),
+(6,11,2,100),
+(7,3,12,100),
+(8,12,3,100),
+(9,4,13,100),
+(10,13,4,100),
+(11,5,14,100),
+(12,14,5,100),
+(13,6,15,100),
+(14,15,6,100),
+(15,7,16,100),
+(16,16,7,100),
+(17,8,17,100),
+(18,17,8,100),
+(19,9,18,100),
+(20,18,9,100),
+(23,21,23,100),
+(24,23,21,100),
+(25,25,26,100),
+(26,26,25,100),
+(27,27,28,100),
+(28,28,27,100),
+(29,29,30,100),
+(30,30,29,100),
+(31,31,32,100),
+(32,32,31,100),
+(39,35,34,100),
+(40,34,35,100),
+(50,37,36,100),
+(51,36,37,100),
+(70,20,22,100),
+(71,22,20,100),
+(72,20,23,100),
+(73,23,20,100),
+(82,1,10,100),
+(83,10,1,100),
+(86,1,19,100),
+(87,19,1,100),
+(88,42,41,100),
+(89,41,42,100),
+(90,43,44,100),
+(91,44,43,100);
+/*!40000 ALTER TABLE `noun_translation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recording`
+--
+
+DROP TABLE IF EXISTS `recording`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recording` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `noun_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `date_time_recorded` datetime NOT NULL,
+  `filename` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `noun_id` (`noun_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `recording_ibfk_1` FOREIGN KEY (`noun_id`) REFERENCES `noun` (`id`),
+  CONSTRAINT `recording_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recording`
+--
+
+LOCK TABLES `recording` WRITE;
+/*!40000 ALTER TABLE `recording` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recording` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `topic`
+--
+
+DROP TABLE IF EXISTS `topic`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `topic` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `level_id` int(11) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `level_id` (`level_id`),
+  CONSTRAINT `topic_ibfk_1` FOREIGN KEY (`level_id`) REFERENCES `level` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `topic`
+--
+
+LOCK TABLES `topic` WRITE;
+/*!40000 ALTER TABLE `topic` DISABLE KEYS */;
+/*!40000 ALTER TABLE `topic` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `topic_child`
+--
+
+DROP TABLE IF EXISTS `topic_child`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `topic_child` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `child_topic_id` int(11) NOT NULL,
+  `parent_topic_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `child_topic_id` (`child_topic_id`),
+  KEY `parent_topic_id` (`parent_topic_id`),
+  CONSTRAINT `topic_child_ibfk_1` FOREIGN KEY (`child_topic_id`) REFERENCES `topic` (`id`),
+  CONSTRAINT `topic_child_ibfk_2` FOREIGN KEY (`parent_topic_id`) REFERENCES `topic` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `topic_child`
+--
+
+LOCK TABLES `topic_child` WRITE;
+/*!40000 ALTER TABLE `topic_child` DISABLE KEYS */;
+/*!40000 ALTER TABLE `topic_child` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `role` ENUM('Contributor', 'Moderator', 'Admin') NOT NULL,
+  `timezone` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES
+(1,'user.Contributor@openlingo.com','contributor_password','Contributor','UTC+10'),
+(2,'user.Moderator@openlingo.com','moderator_password','Moderator','UTC+10'),
+(3,'user.Admin@openlingo.com','admin_password','Admin','UTC+10');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_language`
+--
+
+DROP TABLE IF EXISTS `user_language`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_language` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dialect_id` int(11) NOT NULL,
+  `level_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `is_native` tinyint(1) NOT NULL,
+  `qual_level` varchar(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dialect_id` (`dialect_id`),
+  KEY `level_id` (`level_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_language_ibfk_1` FOREIGN KEY (`dialect_id`) REFERENCES `dialect` (`id`),
+  CONSTRAINT `user_language_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `level` (`id`),
+  CONSTRAINT `user_language_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`qual_level` in ('BEG','INT','COMP','PROF','EXP'))
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_language`
+--
+
+LOCK TABLES `user_language` WRITE;
+/*!40000 ALTER TABLE `user_language` DISABLE KEYS */;
+INSERT INTO `user_language` VALUES
+(1,1,5,2,1,'EXP'),
+(2,5,11,2,0,'EXP'),
+(3,3,5,1,1,'EXP'),
+(4,6,9,1,0,'INT'),
+(5,2,5,3,1,'EXP');
+/*!40000 ALTER TABLE `user_language` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-10-12 11:29:44

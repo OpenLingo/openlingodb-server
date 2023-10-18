@@ -246,8 +246,7 @@ CREATE TABLE IF NOT EXISTS user_language (
     dialect_id INT NOT NULL,
     level_id INT,
     user_id INT NOT NULL,
-    is_native TINYINT(1) NOT NULL,
-    qual_level VARCHAR(4) NOT NULL,
+    qual_level ENUM('Beginner', 'Elementary', 'Intermediate', 'Advanced', 'Highly Competent', 'Native') NOT NULL,
     PRIMARY KEY(id),
     CONSTRAINT `fk_user_language_dialect`
         FOREIGN KEY(dialect_id) 
@@ -263,6 +262,5 @@ CREATE TABLE IF NOT EXISTS user_language (
         FOREIGN KEY(user_id) 
         REFERENCES user(id)
         ON DELETE RESTRICT
-        ON UPDATE CASCADE,
-    CHECK(qual_level IN ('BEG', 'INT', 'COMP', 'PROF', 'EXP'))
+        ON UPDATE CASCADE
 );
