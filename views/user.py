@@ -10,6 +10,7 @@ def get_all_user():
 
 @app.route(ROUTE_PREFIX + "user/<string:email>")
 def get_user_by_email(email: str):
+    print(email)
     u = service.find_user(email)
 
     if not u:

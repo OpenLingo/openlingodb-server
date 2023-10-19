@@ -63,8 +63,8 @@ def insert_user_language(user_language: dict) -> int:
                                            (user_language[nullable] or not nullable.endswith('_id')) else None
 
     sql = """
-        INSERT INTO user_language(dialect_id,level_id,user_id,is_native,qual_level)
-        VALUES (:dialect_id,:level_id,:user_id,:is_native,:qual_level)
+        INSERT INTO user_language(dialect_id,level_id,user_id,qual_level)
+        VALUES (:dialect_id,1,:user_id,:qual_level)
     """
 
     with Database() as db:
